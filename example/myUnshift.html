@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>unshift</title>
+</head>
+<body>
+
+  <script src="../simpletest.js"></script>
+  <h1 style="text-align:center">Array.prototype.unshift()</h1>
+
+
+
+<script>
+// The unshift() method adds one or more elements to the beginning of
+// an array and returns the new length of the array.
+
+
+Array.prototype.myUnshift = function(elements) {
+  var argumentCount = arguments.length;
+  var i = this.length - 1;
+  // var len = array.length;
+  this.length = this.length + argumentCount;
+  // this.length += argumentCount;
+
+  if (argumentCount > 0) {
+    if (this.length + argumentCount > 9.0071993e+15) {
+      throw new TypeError('Too many arguments...')
+    }
+  }
+
+  while (i >= argumentCount - 1) {
+    this[i] = this[i - argumentCount];
+    i--;
+  }
+
+  var l = 0;
+  while (l < arguments.length) {
+    this[l] = arguments[l];
+    l++;
+  }
+
+  return this.length;
+}
+
+
+tests({
+  '1. It should add one element to the beginning of an array.': function() {
+    var myArray = [1, 2, 3];
+    myArray.myUnshift(9);
+    eq(myArray[0], 9);
+  },
+  '2. It should return new length property of the array.': function() {
+    var cars = ['Volkswagen'];
+    cars.myUnshift('Camaro');
+    eq(cars.length, 2);
+    eq(cars[0], 'Camaro');
+  },
+  '3. It should add multiple elements to the array.': function() {
+    var operatingSystems = ['Windows 98', 'Windows XP', 'OSX 10.1'];
+    operatingSystems.myUnshift('Linux Mint', 'RedHat', 'Slackware');
+    eq(operatingSystems.length, 6);
+    operatingSystems.forEach(function(elements, index) {
+      eq(elements, operatingSystems[index]);
+    });
+  }
+});
+
+</script>  
+  
+</body>
+</html>

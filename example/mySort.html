@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>sort</title>
+</head>
+<body>
+  <script src="../simpletest.js"></script>
+  <h1 style="text-align: center">Array.prototype.sort()</h1>
+
+<script>
+
+'use strict'
+// The sort() method sorts the elements of an array in place and returns the array.
+// The sort is not necessarily stable. The default sort order
+// is according to string Unicode code points.
+
+// Syntax:
+// arr.sort([compareFunction])
+
+// Parameters:
+// compareFunction: Optional
+// Specifies a function that defines the sort order. If omitted, the array
+// is sorted according to each character's Unicode code point value, according
+// to the string conversion of each element.
+
+// Return value:
+// The sorted array. Note that the array is sorted in place, and no copy is made.
+
+
+ Array.prototype.mySort = function(callback) {
+  var store;
+  var i = 0;
+
+  while (i < this.length - 1) {
+    for (var j = i + 1; j <= this.length - 1; j++) {
+      if (String(this[i]) > String(this[j])) {
+        store = this[j];
+        this[j] = this[i];
+        this[i] = store;
+      } else {
+        continue;
+      }
+    }
+    i++;
+  }
+
+  if (callback) {
+    var i = 0;
+    while (i < this.length) {
+      for (var j = i + 1; j < this.length; j++) {
+        if (callback(this[i], this[j]) > 0) {
+          store = this[j];
+          this[j] = this[i];
+          this[i] = store;
+        } else {
+          continue;
+        }
+      }
+      i++;
+    }
+  }
+
+  return this;
+}
+
+
+tests({
+  '1. It should take and return same array.': function() {
+    var arr = [];
+    arr.mySort();
+    eq(Array.isArray(arr), true);
+  },
+  '2. It should return same array.': function() {
+    var numbers = [1, 2, 3];
+    var sortedArray = numbers.mySort();
+    eq(numbers, sortedArray);
+  },
+  '3. It should actually sort the array.': function() {
+    var months = ['March', 'Jan', 'Feb', 'Dec'];
+    var monthsAfterSort = ['Dec', 'Feb', 'Jan', 'March'];
+    months.mySort();
+    monthsAfterSort.forEach(function(el, i) {
+      eq(el, months[i]);
+    });
+  },
+  '4. It should sort all undefined elements to the end of the array.': function() {
+    var months = ['Jan', 'Feb', undefined, 'March', 'April', 'June'];
+    var sortedArray = months.mySort();
+    var monthsAfterSort = ['April', 'Feb', 'Jan', 'June', 'March', undefined]
+    eq(String(months), ['April', 'Feb', 'Jan', 'June', 'March', undefined]);
+    sortedArray.forEach(function(el, i) {
+      eq(months[i], el);
+    });
+  },
+  '5. It should take optional callback compareFunction.': function() {
+    var numbers = [7, 70, 4, 10, 9];
+    numbers.mySort(function(a, b) {
+      return a - b;
+    });
+    var numbersAfterSorted = [4, 7, 9, 10, 70];
+    numbersAfterSorted.forEach(function(el, i) {
+      eq(el, numbers[i]);
+    });
+  },
+  '6. It should sort all undefined elements to the end of the array.': function() {
+    var numbers = [9, undefined, 1, 90, undefined, 0, 5];
+    numbers.mySort();
+    var numbersAfterSorted = [0, 1, 5, 9, 90, undefined, undefined];
+    numbersAfterSorted.forEach(function(el, i) {
+      eq(numbers[i], el);
+    });
+  },
+  /* '7. It should sort all \'undefined\' elements to the end of the array, with no call to compareFunction.': function () {
+    function compareNumbers(a, b) {
+      numberOfTimesCallbackHasRun++;
+      return a - b;
+    }
+    var testArray = [undefined, 2, undefined, 1];
+    var numberOfTimesCallbackHasRun = 0;
+
+    testArray.mySort(compareNumbers);
+    var compareFunctionCallsWithUndefined = numberOfTimesCallbackHasRun;
+
+    eq(testArray[2], undefined);
+    eq(testArray[3], undefined);
+
+    testArray = [3, 2, 0, 1];
+    numberOfTimesCallbackHasRun = 0;
+
+    testArray.mySort(compareNumbers);
+    var compareFunctionCallsWithNoUndefined = numberOfTimesCallbackHasRun;
+
+    eq(compareFunctionCallsWithNoUndefined > compareFunctionCallsWithUndefined, true);
+  } */
+
+});
+
+// from the book
+// function mySort(arr) {
+// 	var dirty = false;
+
+// 	function checkIfDirty(array) {
+// 		for (let i = 0; i < arr.length; i++) {
+// 			if (arr[i] > arr[i + 1] && i !== arr.length) {
+// 				var a = arr[i];
+// 				var b = arr[i + 1];
+
+// 				arr[i] = b;
+// 				arr[i + 1] = a;
+
+// 				return true;
+// 			} 
+// 		}	
+// 		return false;
+// 	}
+
+// 	do {
+// 		dirty = checkIfDirty(arr);	
+// 	} while (dirty);
+
+// 	return arr;
+// }
+
+
+
+
+
+
+
+
+
+
+
+
+// ['80', '9', '700', 80, 40, 1, 5, 200].sort(function(a, b) {
+//         if (a < b) {
+//           return -1;
+//         }
+//         if (a > b) {
+//           return 1;
+//         }
+//         return 0;
+//       });
+
+
+
+/* Array.prototype.mySort = function() {
+  var store;
+  var i = 0;
+  var len = this.length -1;
+  // var j = 0;
+
+  while (i < len) {
+    var j = i + 1;
+
+    while (j <= len) {
+      if (String(this[i]) > String(this[j])) {
+        store = this[j];
+        this[j] = this[i];
+        this[i] = store;
+      } else {
+        break;
+      }
+
+      j++;
+    }
+    
+    i++;
+  }
+
+  // for (var i = 0; i < this.length - 1; i++) {
+  //   for (var j = i + 1; j <= this.length - 1; j++) {
+  //     if (String(this[i]) > String(this[j])) {
+  //       store = this[j];
+  //       this[j] = this[i];
+  //       this[i] = store;
+  //     } else {
+  //       continue;
+  //     }
+  //   }
+  // }
+
+  return this;
+}
+ */
+
+// Array.prototype.mySort = function(callback) {
+//   var store;
+//   var i = 0;
+//   var j = 0;
+//   var len = this.length - 1;
+
+//  for (var i = 0; i < len - 1; i++) {
+//     for (var j = i + 1; j <= len - 1; j++) {
+//       if (String(this[i]) > String(this[j])) {
+//         store = this[j];
+//         this[j] = this[i];
+//         this[i] = store;
+//       } else {
+//         continue;
+//       }
+//     }
+//   }
+
+</script>
+
+
+
+
+
+
+</body>
+</html>

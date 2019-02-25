@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>includes</title>
+</head>
+<body>
+  <h1 style="text-align:center">Array.prototype.includes()</h1>
+
+  <script src="../simpletest.js"></script>
+
+<script>
+
+// The includes() method determines whether an array includes a certain element, 
+// returning true or false as appropriate. It uses the sameValueZero algorithm
+// to determine whether the given element is found.
+
+/* function myIncludes(array, searchElement, fromIndex) {
+  let optionalFromIndex = 0;
+
+  if (fromIndex) {
+      optionalFromIndex = fromIndex;
+    }
+
+  for (let i = optionalFromIndex; i < array.length; i++) {
+    
+    if (searchElement === array[i] || Number.isNaN(array[i])) {  // why this line does not return false for myIncludes([NaN], 'something');
+    // Because the second conditional is going to be always true if there is a NaN in the array
+      return true;
+    }
+  }
+
+  return false;
+} */
+
+
+function myIncludes(array, searchElement, fromIndex) {
+  let optionalFromIndex = 0;
+
+  if (fromIndex) {
+      optionalFromIndex = fromIndex;
+    }
+
+  for (let i = optionalFromIndex; i < array.length; i++) {
+    if (searchElement === array[i]) {
+		return true;
+    } else {
+		  if (typeof searchElement === "undefined" && typeof array[i] === "undefined") {
+			  return true;
+		  } else if (typeof searchElement !== "undefined" && typeof array[i] !== "undefined") {
+			  if (searchElement.toString() === "NaN" && array[i].toString() === "NaN") {
+				  return true;
+			  } 
+		  }
+	  }
+  }
+
+  return false;
+}
+
+
+
+tests({
+  '1. It should find the element and return true or false.': function() {
+    let foundElement = myIncludes([1, 2, 3], 1);
+    eq(foundElement, true);
+  },
+  '2. It should take optional fromIndex.': function() {
+    let foundElement = myIncludes([1, 2, 3], 3, 2);
+    eq(foundElement, true);
+  },
+  '3. It should return false if element not found (no optional fromIndex).': function() {
+    let pets = ['cat', 'dog', 'bat'];
+    let foundElement = myIncludes(pets, 'at');
+    eq(foundElement, false);
+  },
+  '4. It should return false if optional fromIndex out of array.length range.': function() {
+    let cities = ['New York', 'Raleigh', 'Phoenix'];
+    let foundElement = myIncludes(cities, 'Raleigh', 2);
+    eq(foundElement, false);
+  },
+  '5. It should default to 0 with negative value searches from index.': function() {
+    let foundElement = myIncludes([1, 2, 3, 4], 3, -100);
+    eq(foundElement, true);
+  },
+  '6. It should return true for NaN.': function() {
+    let foundElement = myIncludes([NaN], NaN);
+    eq(foundElement, true);
+  },
+  '7. It should return true for undefined.': function() {
+    let foundElement = myIncludes([1, undefined], undefined);
+    eq(foundElement, true);
+  },
+  '8. If array has NaN and search element is string, it should return false.': function() {
+    let foundElement = myIncludes([1, NaN], 'some string');
+    eq(foundElement, false);
+  }
+})
+
+
+// if (typeof searchElement === 'undefined' && typeof array[i] === 'undefined') {
+    //   return true;
+    // } else {
+    //   if (typeof searchElement !== 'undefined' && typeof array[i] !== 'undefined') {
+    //     return true;
+    //   }
+    // }
+//  && Number.isNaN(NaN)
+// if (searchElement === undefined) {
+
+  // }
+
+  // if (searchElement.toString() === 'NaN') {
+  //   searchElement = 'NaN';
+  // }
+  
+// Alex includes
+// function myIncludes(arr, el, optionalSearchIndex) {
+//     var searched = false;
+//     if (!arr.length) {
+//       throw new TypeError('myIncludes must be passed an array or an array-like object as first arg.')
+//     }
+//     if (optionalSearchIndex > arr.length) {
+//       return false;
+//     }
+//     var computedSearchIndex = optionalSearchIndex || 0;
+//     if (optionalSearchIndex < 0) {
+//       computedSearchIndex = arr.length + optionalSearchIndex;
+//     }
+//     for (var i = computedSearchIndex; i < arr.length; i++) {
+//       if (typeof arr[i] === 'number') {
+//         if (Number.isNaN(arr[i]) && Number.isNaN(el)) {
+//           searched = true;
+//         }
+//       }
+//       if (arr[i] === el) {
+//         searched = true;
+//       }
+//     }
+//     return searched;
+//   }
+</script>
+  
+</body>
+</html>

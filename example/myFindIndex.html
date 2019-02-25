@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  
+
+  <script src="../simpletest.js"></script>
+
+  <script>
+// The findIndex() method returns the index of the first element in the array that satisfies the provided testing function. Otherwise -1 is returned.
+// Iterates through an array.
+// Runs callback function on each element, if such element is found immediately returns index for that iteration.
+// If callback never returns value, returns -1.
+// if array's length is 0, it returns -1.
+// It takes 3 arguments.
+// It visits indexes even has no value.
+
+function findIndex(array, callback, optionalThis) {
+  let findIndexCallback = callback;
+
+  if (optionalThis) {
+    findIndexCallback = callback.bind(optionalThis);
+  }
+
+  for (let index = 0; index < array.length; index++) {
+    if(findIndexCallback(array[index], index, array)) {
+      return index;
+    }
+  }
+  return -1;
+};
+
+
+
+
+tests({
+  '1. It should run the callback function array.length times.': function() {
+    let callbackRunTimes = 0;
+    findIndex([1, 2, 3, 4], function() {
+      callbackRunTimes++
+    });
+    eq(callbackRunTimes, 4);
+  },
+  '2. It should pass in the ith element as the first argument to the callback.': function() {
+    findIndex([1], function(value) {
+      eq(value, 1);
+    });
+  },
+  '3. It should pass in the ith position as the second argument to the callback.': function() {
+    findIndex([1], function(value, index) {
+      eq(index, 0);
+    });
+  },
+  '4. It should pass in the original array as the the third argument to the callback.': function() {
+    let testArray = [1];
+    findIndex(testArray, function(value, index, originalArray) {
+      eq(originalArray, testArray);
+    });
+  },
+  '5. It should except configurable this object. Value to use as this when executing callback.': function() {
+    findIndex(['something'], function() {
+      eq(this.optionalThis, 'Hello world.');
+    }, {optionalThis: 'Hello world.'});
+  },
+  '6. If the array length is 0, it should return "-1".': function() {
+    let zeroIndex = findIndex([], function(value) {});
+    eq(zeroIndex, -1);
+  },
+  '7. If element does not exist it should return "-1".': function() {
+    let noValue = findIndex([1, 6, 10], function() {});
+    eq(noValue, -1);
+  },
+  '8. It should actually return found element.': function() {
+    let indexIs = findIndex([1, 9, 2, 10, 30, 55, ], function(value) {
+      return value > 10;
+    });
+    eq(indexIs, 4);
+  },
+  '9. It should invoke callback for every indexes, even for unassigned ones.': function() {
+    let unassignedIndex = findIndex([1, , , 2, 3], function(value) {
+      return value > 2;
+    });
+    eq(unassignedIndex, 4);
+  },
+  '10. It should return true index.': function() {
+    let callbackRunTimes = 0;
+    findIndex([false, false, true, false], function(value) {
+      callbackRunTimes++;
+      return value;
+    });
+    eq(callbackRunTimes, 3);
+  }
+});
+
+  </script>
+
+
+</body>
+</html>

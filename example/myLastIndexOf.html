@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>lastIndexOf</title>
+</head>
+<body>
+
+  <h1 style="text-align:center">Array.prototype.lastIndexOf()</h1>
+  <script src="../simpletest.js"></script>
+
+
+<script>
+// The lastIndexOf() method returns the last index at which a given element 
+// can be found in the array, or -1 if it is not present. The array is 
+// searched backwards, starting at fromIndex.
+
+
+
+function myLastIndexOf(array, searchElement, fromIndex) {
+  var result = -1;
+  var found = false;
+
+  fromIndex = arguments.length === 3 ? fromIndex : array.length - 1;
+  fromIndex = fromIndex < 0 ? array.length - Math.abs(fromIndex) : fromIndex;
+
+  if (Object.keys(array).length === 0) {
+    return -1;
+  } else if (array.length !== Object.keys(array).length && array[0] === undefined) {
+    return -1;
+  }
+
+  for (var i = fromIndex; i >= 0; i--) {
+    if (array[i] === undefined && !found) {
+      result = 1;
+      found = true;
+      
+    }
+    else if (array[i] !== null && array[i] === searchElement && !found) {
+      result = i;
+      found = true;
+    }
+  }
+
+  found = true;
+  return array.length === 0 ? -1 : result;
+}
+
+
+
+tests({
+  '1. It should iterate backwards through the array and return the last index.': function() {
+    var index = myLastIndexOf(['apple', 'banana', 'orange', 'apple'], 'apple');
+    eq(index, 3);
+  },
+  '2. It should take optional start from index.': function() {
+    var index = myLastIndexOf(['a', 'b', 'c', 'd', 'e'], 'e');
+    eq(index, 4);
+  },
+  '3. If provided index is negative 1, it should still search from back to front.': function() {
+    var index = myLastIndexOf(['apple', 'banana', 'cherry'], 'cherry', -1);
+    eq(index, 2);
+  },
+  '4. It should return -1 if array is empty.': function() {
+    var index = myLastIndexOf([]);
+    eq(index, -1);
+  },
+  '5. It should return n index if array undefined.': function() {
+    var index = myLastIndexOf([undefined, undefined]);
+    eq(index, 1);
+  },
+  '6. It should return -1 if array null.': function() {
+    var index = myLastIndexOf([null, null]);
+    eq(index, -1);
+  },
+  '7. If fromIndex -2 it should return -1 for following array.': function() {
+    var index = myLastIndexOf(['apple', 'banana', 'cherry'], 'cherry', -2);
+    eq(index, -1);
+  },
+  '8. If the calculated index is less than 0, -1 is returned.': function() {
+    var index = myLastIndexOf(['Dodo', 'Tiger', 'Penguin', 'Dodo'], 'Dodo', -100);
+    eq(index, -1);
+  },
+  '9. Custom position index.': function() {
+    var index = myLastIndexOf(['apple', 'banana', 'cherry'], 'cherry', 1);
+    eq(index, -1);
+  },
+  '10. Custom position index.': function() {
+    var index = myLastIndexOf(['apple', 'banana', 'cherry'], 'cherry', 2);
+    eq(index, 2);
+  },
+  '11. Custom position index.': function() {
+    var index = myLastIndexOf(['cherry', 'apple', 'banana', 'cherry'], 'cherry', -4);
+    eq(index, 0);
+  },
+  '12. Custom position index.': function() {
+    var index = myLastIndexOf([1, 2, 3, 4], 2, 9);
+    eq(index, 1);
+  },
+  '13. It should bypass holes ,,, and return -1 "undefined".': function() {
+    var index = myLastIndexOf([,,,], undefined);
+    eq(index, -1);
+  },
+  '14. It should bypass holes ,,, and return -1 "NaN".': function() {
+    var index = myLastIndexOf([,,,], NaN);
+    eq(index, -1);
+  },
+  '15. Custom position with holes.': function() {
+    var index = myLastIndexOf([,,, 'value',,,, 'value'], 'value', 0);
+    eq(index, -1);
+  },
+  '16. Custom position with holes.': function() {
+    var index = myLastIndexOf(['value',,,, 'value'], 'value', 0);
+    eq(index, 0);
+  },
+  '17. Custom position with holes.': function() {
+    var index = myLastIndexOf(['value',,,, 'value'], 'value', 4);
+    eq(index, 4);
+  }
+});
+
+
+// function myLastIndexOf(array, searchElement, fromIndex) {
+// 	fromIndex = arguments.length === 3 ? fromIndex : array.length;
+// 	fromIndex = fromIndex < 0 ? array.length - Math.abs(fromIndex) : fromIndex;
+// 	var result = -1;
+//   var found = false;
+  
+//   for (var i = fromIndex; i >= 0; i--) {
+//     if (array[i] === searchElement && !found) {
+// 		  result = i;
+// 		  found = true;
+// 	  }
+//   }
+// 	found = true;
+// 	return array.length === 0 ? -1 : result;
+// }
+
+
+
+// function myLastIndexOf(array, searchElement, fromIndex) {
+  
+//   if (arguments.length === 3) {
+//    if (fromIndex < 0) {
+//     fromIndex = array.length + fromIndex + 1;
+//    }
+
+//    } else {
+//      fromIndex = array.length;
+//    }
+   
+//   // if (fromIndex < 0) {
+//   //   return -1;
+//   // }  
+
+//   for (var i = fromIndex; i--;) {
+//     if (searchElement === array[i]) {
+//       return i;
+//     }
+//   }
+
+//   return i;
+// }
+
+// function myLastIndexOf(array, searchElement, fromIndex) {
+//   var counter;
+  
+//   if (array.length === 0) {
+//     return -1;
+//   }
+
+//   if (arguments.length > 2) {
+//     if (fromIndex < 0) {
+//       counter = array.length + fromIndex - 2;
+//       // counter = fromIndex;
+//     } else {
+//       counter = array.length - fromIndex + 1;
+//     }
+//   }
+
+//   if (arguments.length < 3) {
+//     counter = array.length - 1;
+//   }
+
+//   // if (counter < 0) {
+//   //   return -1;
+//   // }
+
+//   for (var i = array.length - 1; i >= counter; i--) {
+//       if (searchElement === array[i]) {
+//       return i;
+//     }
+//   }
+
+//   return -1;
+// }
+
+
+
+
+
+
+/* function myLastIndexOf(array, searchElement, fromIndex) {
+  var counter;
+
+  if (array.length > 0 && fromIndex >= 0) {
+    counter = array.length - 1;
+  } else {
+    if (array.length > 0 && fromIndex < 0) {
+      counter = array.length + fromIndex + 1;
+    } else if (array.length > 0) {
+      counter = array.length;
+    }
+  }
+
+  if (counter < 0) {
+    return -1;
+  }
+
+  for (var i = counter; i--;) {
+    
+    if (searchElement === array[i]) {
+      return i;
+    }
+  }
+
+  return -1;
+} */
+
+
+// Janelle function:
+// function myLastIndexOf(array, searchElement, searchIndex){
+//     var lastIndex = array.length - 1;
+
+//     if (searchIndex) {
+//       if (searchIndex < 0) {
+//         lastIndex += (searchIndex + 1);
+//       } else {
+//         lastIndex = searchIndex;
+//       }   
+//     }
+
+//     for (var i = lastIndex; i >= 0; i--) {
+//       if (array[i] === searchElement) {
+//         return i;
+//       }
+//     }
+
+//     return -1;
+//   }
+
+///////////////////////////////////
+// Janelle function:
+// function myLastIndexOf(array, searchElement, searchIndex){
+//   var lastIndex = array.length - 1;
+//   var newArray = Object.keys(array);
+
+
+
+//     if (searchIndex) {
+//       if (searchIndex < 0) {
+//         lastIndex += (searchIndex + 1);
+//       } else {
+//         lastIndex = searchIndex;
+//       }   
+//     }
+
+//     for (var i = lastIndex; i >= 0; i--) {
+//       if (array[i] === searchElement) {
+//         return i;
+//       }
+//     }
+
+//     return -1;
+//   }
+
+////////////////////////////////////////////
+</script>
+
+
+
+
+</body>
+</html>

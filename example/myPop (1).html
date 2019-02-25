@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>pop</title>
+</head>
+<body>
+
+  <script src="../simpletest.js"></script>
+  <h1 style="text-align:center">Array.prototype.pop()</h1>
+ <script>
+// The pop() method removes the last element from an array and returns
+// that element. This method changes the length of
+// the array.
+ 
+Array.prototype.myPop = function() {
+  var popped = this[this.length - 1];
+
+  if (this.length === 0) {
+    return undefined;
+  } else {
+    this.length -= 1;
+  }
+
+  return popped;
+}
+
+
+
+tests({
+  '1. It should remove the last element from the array.': function() {
+    var cities = ['New York', 'Raleig', 'Phoenix'];
+    var lastCity = cities.myPop();
+    eq(lastCity, 'Phoenix');
+  },
+  '2. It should return undefined for empty array.': function() {
+    var colors = ['red', 'blue', 'yellow'];
+    colors.myPop(colors);
+    eq(colors, []);
+  }
+});
+ 
+ 
+ </script> 
+
+
+
+
+
+
+
+
+</body>
+</html>

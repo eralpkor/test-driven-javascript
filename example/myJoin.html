@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>join</title>
+</head>
+<body>
+  
+<script src="../simpletest.js"></script>
+
+<script>
+// Array.prototype.join()
+// The join() method joins all elements of an array (or an array-like object) into a string and returns this string.
+// The string conversions of all array elements are joined into one string.
+// It re-implements, with tests, the built-in join() array method.
+
+function myJoin(array, separator) {
+  // var array = array;
+  
+  for (var index = 0; index < array.length; index++) {
+    if (arguments.length < 2) {
+      return String(array);
+    }
+
+    if (array[index] === null || array[index] === undefined) {
+      array[index] = '';
+    }
+  }
+
+  if (array.length > 0) {
+    array.reduce(function(accumulator, currentValue) {  
+      return String(accumulator) + separator + String(currentValue);
+    }, '');
+  }
+
+  if (array.length === 0 || array === undefined) {
+    return '';
+  }
+
+  return array.reduce(function(accumulator, currentValue) {  
+    return String(accumulator) + separator + String(currentValue);
+  });
+}
+
+
+tests({
+  '1. it should join an array.': function() {
+    var result = myJoin([1, 2, 3]);
+    eq(result, '1,2,3');
+  },
+  '2. If an element is undefined, it should converted to the empty string.': function() {
+    var result = myJoin([undefined]);
+    eq(result, '');
+  },
+  '3. It should count holes and return them if no separator.': function() {
+    var result = myJoin([, , 1, 2, 3]);
+    eq(result, ',,1,2,3');
+  },
+  '4. It should except separator.': function() {
+    var result = myJoin([1, 2], '-');
+    eq(result, '1-2');
+  },
+  '5. If an element is null, it should converted to the empty string.': function() {
+    var result = myJoin([null]);
+    eq(result, '');
+  },
+  '6. It should return empty string for empty array.': function() {
+    var result = myJoin([]);
+    eq(result, '');
+  },
+  '7. It should return empty string for null even with a separator.': function() {
+    var result = myJoin([null], '-');
+    eq(result, '');
+  },
+  '8. If array contains null in any location, it should return new array filtering null.': function() {
+    var result = myJoin([null, 1, 2]); // add to the last to test
+    eq(result, ',1,2');
+  },
+  '9. It should start with separator if the first index is null.': function() {
+    var result = myJoin([null, 1, 2], '-');
+    eq(result, '-1-2');
+  },
+  '10. If null location is in the other indexes it should convert it to empty string.': function() {
+    var result = myJoin([1, 2, null, 3], '-');
+    eq(String(result), '1-2--3');
+  },
+  '11. If array has holes, undefined and null, it should convert them as empty arrays.': function() {
+    var crazyString = myJoin([1, 2, null, undefined, 'a', 'b', , , null], '-');
+    eq(crazyString, '1-2---a-b---');
+  },
+  '12. If separator is an empty string, all elements are joined without any characters in between them.': function() {
+    var emptyString = myJoin([1, 2, null, undefined, 'a', 'b', , , null], '');
+    eq(emptyString, '12ab');
+  }
+});
+
+
+
+
+// function myJoin(array, separator = ',') {
+// 	var result = '';
+// 	for (var i = 0; i < array.length; i++) {
+// 		if (i !== 0) { result += separator + String(array[i]) }
+// 		else { result += String(array[i]) }
+// 	}
+// 	return result;
+// }
+
+// to filter out null from array
+    // if (array[index] === null) {
+    //   return array.filter(function (obj) {
+    //     return obj;
+    //   })
+    //   .reduce(function (accumulator, currentValue) {
+    //     return String(accumulator) + separator + String(currentValue);
+    //   }, '');
+    // }
+
+// } else if (array !== null && array.length === 1) {
+  //     return '';
+  // }
+
+// const num = window.prompt();
+// var num = 333444555666; // number variable
+// var str = num.toString(); // number conversion to string
+// var result = [str[0]]; // result variable that takes str first index
+  
+// for(var x = 1; x < str.length; x++) // loop str.length starting from index 1
+//   {
+//     if((str[x-1] % 2 === 0) && (str[x] % 2 === 0)) // if str 0 and str 1 modules (reminder equals 0)
+//      {
+//       result.push('-', str[x]); // push '-' to str[i]
+//      }
+//     else
+//      {
+//       result.push(str[x]); // else push str[i] without '-'
+//      }
+//   }
+// console.log(result.join(''));
+// [1, 2, 3].reduce((acc, val) => String(acc) + '-' + String(val))
+
+// function myJoin(array) {
+//   for (var i = 0; i < array.length; i++) {
+//     return array;
+//   }
+// }
+// var result = [newString[0]];
+
+// var newString = array.toString();
+
+
+// function myJoin(array, opt) {
+// 	var result = '';
+  
+// 	for (var i = 0; i < array.length; i++) {
+// 		if (arguments.length > 1 && i !== 0) {
+//       result += opt + String(array[i]);
+//       } else {
+//         result += String(array[i])
+//       }
+// 	}
+
+// 	return result;
+// }
+// if (separator === undefined) {
+    //   return array.toString();
+    // }
+ // return String(accumulator) + separator + String(currentValue);
+</script>
+</body>
+</html>
+
+
+
+
+
+
+
+

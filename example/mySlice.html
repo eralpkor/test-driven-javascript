@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>slice</title>
+</head>
+<body>
+  <h1 style="text-align:center">Array.prototype.slice()</h1>
+<script src="../simpletest.js"></script>
+
+
+
+<script>
+
+  'use strict';
+// The slice() method returns a shallow copy of a portion of an array into a new array
+// object selected from begin to end (end not included). The original array will not be modified.
+
+
+Array.prototype.mySlice = function(begin, end) {
+  var fromIndex = 0;
+  var slicedArray = [];
+  var sliced = false;
+
+  if (begin) {
+    if (begin > this.length) {
+      return slicedArray;
+    } else if (begin < 0) {
+      fromIndex = Math.abs(begin);
+      sliced = true;
+    } else {
+      fromIndex = begin;
+      sliced = true;
+    }
+  }
+
+  if (end) {
+    end = end > 0 ? end - 1 : end;
+    end = end < 0 ? (this.length - Math.abs(end) - 1) : end;
+    sliced = true;
+  }
+
+  for (var i = fromIndex; i < this.length; i++) {
+    if (!sliced) {
+      return this;
+    } else {
+      slicedArray.push(this[i]);
+        if (i === end) {
+        break;
+      }
+    }
+  }
+
+  return slicedArray;
+}
+
+
+tests({
+'1. It should take array as an argument, access the array and return copy of an array.': function() {
+  var slicedArray = [1, 2, 3];
+  slicedArray.mySlice();
+  slicedArray.forEach(function(el, i) {
+    eq(slicedArray[i], el);
+  });
+},
+'2. It should take second argument as slice start point.': function() {
+  var slicedArray = [1, 2, 3, 4];
+  slicedArray.mySlice(1);
+  slicedArray.forEach(function (element, i) {
+    eq(element, slicedArray[i]);
+  });
+},
+'3. If begin is greater than the length of the sequence, an empty array is returned.': function() {
+  var animals = ['bison', 'camel', 'duck', 'elephant'];
+  var slicedArray = animals.mySlice(4);
+  eq(animals.length, 4);
+  eq(slicedArray.length, 0);
+},
+'4. If begin is undefined, slice begins from index 0.': function() {
+  var fruits = ['Banana', 'Orange', 'Lemon', 'Apple', 'Mango'];
+  var slicedArray = fruits.mySlice(undefined);
+  fruits.forEach(function(el, i) {
+    eq(fruits[i], el);
+  });
+  eq(slicedArray.length, 5);
+},
+'5. If negative index is used it should extract from the end of the array.': function() {
+  var numbers = [1, 2, 3, 4];
+  var slicedArray = numbers.mySlice(-2);
+  eq(slicedArray[0], 3);
+  eq(slicedArray[1], 4);
+  numbers.forEach(function(el, i) {
+    eq(numbers[i], el);
+  });
+  eq(numbers[0], 1);
+  eq(numbers[1], 2);
+  eq(numbers[3], 4);
+},
+'6. It should take third argument as slice end point.': function() {
+  var numbers = [1, 2, 3, 4].mySlice(0, 3);
+  eq(numbers.length, 3);
+  eq(numbers[3], undefined);
+  eq(numbers[2], 3);
+},
+'7. It should take both arguments as positive numbers.': function() {
+  var colors = ['blue', 'red', 'yellow', 'pink', 'brown'].mySlice(1, 4);
+  eq(colors[0], 'red');
+  eq(colors.length, 3);
+},
+'8. If end is greater than the length of the sequence, slice extracts through to the end of the sequence (arr.length).': function() {
+  var numbers = [1, 2, 3].mySlice(0, 4);
+  numbers.forEach(function(el, i) {
+    eq(numbers[i], el);
+  });
+  eq(numbers[0], 1);
+  eq(numbers[2], 3);
+},
+'9. If array contains string, number and boolean it should copy to the new array.': function() {
+  var mixedArray = [1, 2, 'string', true, false].mySlice(1);
+  eq(String(mixedArray), [2, 'string', true, false]);
+},
+'10. It should not change the original array.': function() {
+  var originalArray = ['Great stuff', 'Watch & Code', 'Methods are killing me.'];
+  var newArray = originalArray.mySlice(1, 2);
+  eq(String(newArray), ['Watch & Code']);
+  eq(String(originalArray), ['Great stuff', 'Watch & Code', 'Methods are killing me.']);
+},
+'11. If end is negative index it should offset from the end of the sequence.': function() {
+  var slicedArray = [false, 'camel', 'duck', 'elephant', true].mySlice(2, -1);
+  eq(String(slicedArray), ['duck', 'elephant']);
+}
+});
+
+
+</script>
+
+
+</body>
+</html>

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Array every</title>
+</head>
+<body>
+  <h1 style="text-align: center">Array.prototype.every()</h1>
+  <script src="../simpletest.js"></script>
+
+
+  <script>
+// The every() method tests whether all elements in the array pass the test implemented by the provided function.
+// Iterates through on an array
+// Runs a callback on each value in the array
+// If the callback function returns false for any single value, returns false
+// Otherwise, return true
+// Result of the callback will ALWAYS  be a boolean.
+
+function every(array, callback, optionalThis) {
+  var everyCallback = callback;
+
+  if (optionalThis) {
+    everyCallback = callback.bind(optionalThis);
+  }
+
+  for (let index = 0; index < array.length; index++) {
+    if (everyCallback(array[index], index, array) === false && index in array) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+
+tests({
+  '1. It should run callback array.length times.': function() {
+    var counter = 0;
+    every([1, 2, 3], function() {
+      counter++;
+    });
+    eq(counter, 3);
+  },
+  '2. It should pass in the ith element as the first argument to the callback.': function() {
+    every([1], function(value) {
+      eq(value, 1);
+    });
+  },
+  '3. It should pass ith element as the second argument to the callback. ': function() {
+    every([1], function(value, index) {
+      eq(index, 0);
+    });
+  },
+  '4. It should return false, if callback returns false for any single value. ': function() {
+    var everyArray = every([1, 2, 3], function(value) {
+      return value < 2;
+    });
+    eq(everyArray, false);
+  },
+  '5. It should return true, if callback returns true for every single value. ': function() {
+    var everyArray = every([-1, -2, -3], function(value) {
+      return value < 0;
+    });
+    eq(everyArray, true);
+  },
+  '6. It should return "boolean" as callbacks result. ': function() {
+    var everyArray = every([1], function(value) {
+      return value === 1;
+    });
+    eq(typeof(everyArray), 'boolean');
+  },
+  '7. It should accept optional this argument. ': function(value) {
+    every([1], function() {
+      eq(this.optionalThis, 'Hello world');
+    }, {optionalThis: 'Hello world'});
+  },
+  '8. It should return "true" if callback run on an empty array.': function() {
+    var everyArray = every([], function(value) {
+      return value === 100;
+    });
+    eq(everyArray, true);
+  },
+  '9. It should pass in the original array as the the third argument to the callback.': function() {
+    var testArray = [1, 2, 3];
+    every(testArray, function(value, index, array) {
+      eq(testArray, array);
+    });
+  },
+  '10. It should bypass "holes, unassigned indexes" when callback is invoked.': function() {
+    var everyArray = every([, 1], function(value) {
+      return value > 0;
+    });
+    console.log(everyArray);
+    eq(everyArray, true);
+  }
+});
+
+  </script>
+</body>
+</html>

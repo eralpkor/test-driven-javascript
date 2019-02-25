@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <script src="../simpletest.js"></script>
+  
+
+
+<script>
+  
+
+function reduce(array, callback, initialValue) {
+  var startingIndex = 0;
+  if (arguments.length < 3) {
+    startingIndex++;
+  }
+
+  for (var i = startingIndex; i < array.length; i++) {
+    callback();
+  }
+};
+
+tests({
+  'If initialValue, callback should run array.length times.': function() {
+    var numberOfTimesCallbackHasRun = 0;
+    reduce([1], function() {
+      numberOfTimesCallbackHasRun++
+    }, 0);
+    eq(numberOfTimesCallbackHasRun, 1);
+  },
+  'If no initialValue, callback should run array.length -1 times.': function() {
+    var numberOfTimesCallbackHasRun = 0;
+    reduce([1], function() {
+      numberOfTimesCallbackHasRun++
+    });
+    eq(numberOfTimesCallbackHasRun, 0);
+  },
+
+  'If initialValue, previousValue should start with initialValue.': function() {
+    fail();
+
+  },
+  'If initialValue, currentValue should start with array[0].': function() {
+    fail();
+  },
+  'If initialValue, callback will start at index 0.': function() {
+    fail();
+  },
+
+  'If no initialValue, previousValue should start with array[0].': function() {
+    fail();
+  },
+  'If no initialValue, currentValue should start with array[1].': function() {
+    fail();
+  },
+  'If no initialValue, callback will start at index 1.': function() {
+    fail();
+  },
+
+  'If initialValue, and array is empty, return initialValue without calling callback.': function() {
+    fail();
+  },
+  'If no initialValue, and array has one element, it should return that element without calling callback.': function() {
+    fail();
+  },
+
+  'It should actually reduce.': function() {
+    fail();
+  },
+  'It should execute holes.': function() {
+    fail();
+  },
+  'If array is empty, and no initialValue, throw TypeError.': function() {
+    fail();
+  },
+  'It should pass array as fourth argument to callback.': function() {
+    fail();
+  }
+});
+
+</script>
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>fill</title>
+</head>
+<body>
+  <script src="../simpletest.js"></script>
+
+  <h1 style="text-align:center">Array.prototype.fill()</h1>
+
+ <script>
+ 
+ // The fill() method fills all the elements of an array from a start index 
+//  to an end index with a static value. The end index is not included.
+
+// Syntax: arr.fill(value[, start[, end]])
+
+// value
+// Value to fill an array.
+// start Optional
+// Start index, defaults to 0.
+// end Optional
+// End index, defaults to this.length.
+
+Array.prototype.myFill = function(value, start, end) {
+  var len = this.length;
+
+  if (!start) {
+    start = 0;
+  }
+
+  if (start > this.length) {
+    return this;
+  }
+  
+  start = (start < 0) ? Math.max(len + start, 0) : start;
+  end = (!end && end !== 0) ? len : end;
+  var endIndex = end < 0 ? Math.max(len + end, 0) : Math.min(end, len);
+
+  for (var i = start; i < endIndex; i++) {
+    this[i] = value;
+  }
+
+  return this;
+}
+
+
+
+ tests({
+   '1. It should take an array and return same array with given value.': function() {
+     var numbers = [1, 2, 3, 4];
+     numbers.myFill(7);
+     eq(numbers[0], 7);
+     eq(numbers[3], 7);
+   },
+   '2. It should take optional start index.': function() {
+     var numbers = [1, 2, 3, 4];
+     numbers.myFill(7, 2);
+     eq(numbers[0], 1);
+     eq(numbers[1], 2);
+     eq(numbers[2], 7);
+     eq(numbers[3], 7);
+   },
+   '3. It should take optional end index.': function() {
+     var numbers = [1, 2, 3, 4];
+     numbers.myFill(7, 0, 3);
+     eq(numbers[3], 4);
+   },
+   '4. It should start from end of the array if start index negative.': function() {
+     var numbers = [1, 2, 3, 4];
+     numbers.myFill(7, -1);
+     eq(numbers[3], 7);
+     eq(numbers[0], 1);
+   },
+   '5. Custom negative start index.': function() {
+     var numbers = [1, 2, 3, 4];
+     numbers.myFill(7, -3);
+     eq(numbers[0], 1);
+     eq(numbers[1], 7);
+     eq(numbers[2], 7);
+     eq(numbers[3], 7);
+   },
+   '6. It should handle negative end index.': function() {
+     var numbers = [1, 2, 3, 4];
+     numbers.myFill(7, 1, -2);
+     eq(numbers[0], 1);
+     eq(numbers[1], 7);
+     eq(numbers[2], 3);
+     eq(numbers[3], 4);
+   },
+   'When the fill method gets passed an object, it will copy the reference and fill the array with references to that object.': function() {
+     var obj = {length: 1};
+     var arr = [];
+     arr.myFill.call(obj, 1);
+     eq(JSON.stringify(obj), JSON.stringify({0: 1, length: 1}));
+   }
+ });
+ 
+ 
+ </script> 
+  
+</body>
+</html>

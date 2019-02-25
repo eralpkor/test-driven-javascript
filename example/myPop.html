@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>pop</title>
+</head>
+<body>
+
+  <script src="../simpletest.js"></script>
+  <h1 style="text-align:center">Array.prototype.myPop()</h1>
+
+<script>
+// The pop() method removes the last element from an array
+//and returns that element. This method changes the length of the array.
+
+Array.prototype.myPop = function() {
+  var popped = this[this.length - 1];
+
+  if (this.length === 0) {
+    return undefined;
+  }
+  this.length = this.length - 1;
+  // this.length -= 1;
+  return popped;
+}
+
+
+tests({
+  '1. It should return undefined if array is empty.': function() {
+    var emptyArray = [];
+    var poppedArray = emptyArray.myPop();
+    eq(poppedArray, undefined);
+  },
+  '2. It should remove the first element from the array.': function() {
+    var myArray = [1, 2, 3];
+    var lastElement = myArray.myPop();
+    myArray.forEach(function(element, index) {
+      eq(element, myArray[index]);
+    });
+    eq(String(myArray), [1, 2]);
+    eq(lastElement, 3);
+  },
+  '3. It should remove first element and changes the length of the array.': function() {
+    var cats = ['sunny', 'norman'];
+    cats.myPop();
+    eq(cats[0], 'sunny');
+    eq(cats.length, 1);
+  },
+  '4. It should return the first element of the array.': function() {
+    var cars = ['Toyota', 'Nissan', 'Camaro'];
+    var popped = cars.myPop();
+    eq(popped, 'Camaro');
+  },
+  '5. It should be used on array like objects.': function() {
+    var myObject = {0: 'hello', 1: 'sunny', 2: 'today', length: 3};
+    var popped = Array.prototype.myPop.call(myObject);
+    eq(myObject.length, 2);
+    eq(popped, 'today');
+  }
+});
+
+</script>
+
+
+
+
+
+
+  
+</body>
+</html>

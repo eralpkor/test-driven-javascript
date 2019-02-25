@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>indexOf</title>
+</head>
+<body style="background-color:blueviolet">
+  <h1 style="text-align:center; color:antiquewhite">Array.prototype.indexOf()</h1>
+
+
+<script src="../simpletest.js"></script>
+
+<script>
+// The indexOf() method returns the first index at which a given element can be found in the array, or -1 if it is not present.
+// arr.indexOf(searchElement[, fromIndex]), fromIndex: start from.
+// indexOf() compares searchElement to elements of the Array using strict equality (the same method used by the === or triple-equals operator)
+// 
+
+function myIndexOf(array, searchElement, fromIndex) {
+
+  if (!fromIndex || fromIndex < 0) {
+    fromIndex = 0;
+  }
+
+  for (var index = fromIndex; index < array.length; index++) {
+    if (searchElement === array[index]) {
+      return index;
+    }
+  }
+
+  return -1;
+}
+
+
+tests({
+  '1. It should iterate through the array and return the first index that found.': function() {
+    var index = myIndexOf([1, 2, 3, 4], 2);
+    eq(index, 1);
+  },
+  '2. It should take optional start from index.': function() {
+    var index = myIndexOf([1, 2, 3, 4, 5, 3], 3, 3);
+    eq(index, 5);
+  },
+  '3. If provided index is negative, it should still search from front to back.': function() {
+    var index = myIndexOf(['apple', 'banana', 'cherry'], 'cherry', -2);
+    eq(index, 2);
+  },
+  '4. It should return -1 if array is empty.': function() {
+    var index = myIndexOf([]);
+    eq(index, -1);
+  },
+  '5. It should return 0 if array undefined.': function() {
+    var index = myIndexOf([undefined, undefined]);
+    eq(index, 0);
+  },
+  '6. It should return -1 if array null.': function() {
+    var index = myIndexOf([null, null]);
+    eq(index, -1);
+  }
+})
+</script>
+
+
+</body>
+</html>

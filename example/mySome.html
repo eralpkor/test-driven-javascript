@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Array some</title>
+</head>
+<body>
+  <h1 style="text-align: center">Array some</h1>
+  <script src="../simpletest.js"></script>
+
+
+<script>
+'use strict'
+
+// Iterates through an array
+// Runs a callback on each value in the array
+// It should pass ith position of an array pass it to callback
+// If the callback returns true for at least one single value, returns true
+// Otherwise returns false'
+// Is return value actually boolean typeOf
+// The result of the callback will ALWAYS be a boolean. true or false
+
+function some(array, callback, optionalThis) {
+  var someCallback = callback;
+
+  if (optionalThis) {
+    someCallback = callback.bind(optionalThis);
+  }
+
+  for (let index = 0; index < array.length; index++) {
+    if(someCallback(array[index], index, array) && index in array) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+
+tests({
+  '1. It should run callback array.length times.': function() {
+    var numberOfTimes = 0;
+    some([1, 2, 3], function(value) {
+      numberOfTimes++
+    });
+    eq(numberOfTimes, 3);
+  },
+  '2. It should run the callback on each value in the array.': function() {
+    some(['a'], function(value) {
+      eq(value, 'a');
+    });
+  },
+  '3. It should pass ith position as second argument to the callback.': function() {
+    some([1], function(value, index) {
+      eq(index, 0);
+    });
+  },
+  '4. It should return true for at least one single value in the array.': function() {
+    var someArray = some([1, 2, 3], function(value) {
+      return value === 2;
+    });
+    eq(someArray, true);
+  },
+  '5. It should return false if no elements matches to criteria by callback.': function() {
+    var someArray = some([1, 2, 3], function(value) {
+      return value > 4;
+    });
+    eq(someArray, false);
+  },
+  '6. It should return "boolean" as callbacks result.': function() {
+    var someArray = some([1, 2, 3], function(value) {
+        return value < 1;
+    });
+    eq(typeof(someArray), 'boolean');
+  },
+  '7. It should accept optional this argument.': function() {
+    some([1], function() {
+      eq(this.optionalThis, 'Optional this');
+    }, {optionalThis: 'Optional this'});
+  },
+  '8. It should return "false" if callback run on an empty array.': function() {
+    var someArray = some([], function(value) {
+      return value > 100;
+    });
+    eq(someArray, false);
+  },
+  '9. It should pass in the original array as the third argument to the callback.': function() {
+    var testArray = [1, 2, 3];
+    some(testArray, function(value, index, array) {
+      eq(testArray, array);
+    });
+  },
+  '10. It should bypass "holes, unassigned indexes" when callback is invoked.': function() {
+    var someArray = some([, 1, undefined], function(value) {
+      return value === 1;
+    });
+    eq(someArray, true);
+  },
+  '11. It should not mutate the array': function() {
+    var someArray = [1, 2, 3];
+    some(someArray, function(value, index, array) {
+      return someArray;
+    });
+    eq(someArray.toString(), [1, 2, 3]);
+  }
+});
+
+</script>
+</body>
+</html>

@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>splice</title>
+</head>
+<body>
+  <script src="../simpletest.js"></script>
+  <h1 style="text-align:center">Array.prototype.splice()</h1>
+
+<script>
+  'use strict';
+// Array.prototype.splice()
+// The splice() method changes the contents of an array by 
+// removing existing elements and/or adding new elements.
+
+// Syntax
+// array.splice(start[, deleteCount[, item1[, item2[, ...]]]])
+// Return value:
+// An array containing the deletedElements elements. If only one element is removed, 
+// an array of one element is returned. If no elements are removed,
+//  an empty array is returned.
+
+
+Array.prototype.mySplice = function(start, deleteCount) {
+  var deletedElements = [];
+  var len = this.length;
+  var backupArray = [];
+
+  // Get starting index, if none then it's 0.
+  var start = start < 0 ? Math.max(len + start, 0) : Math.min(start, len);
+
+  // Get how many elements to be deleted and number of items to add.
+  if (arguments.length === 0) {
+    return deletedElements;
+    var insertCount = 0;
+    var deleteCount = 0;
+  } else if (arguments.length === 1) {
+    var itemCount = 0;
+    var deleteCount = len - start;
+  } else {
+    var itemCount = arguments.length - 2;
+    var deleteCount = Math.min(Math.max(deleteCount, 0), len - start);
+  }
+
+  // Get end index that will be deleted from start index.
+  var endIndex = deleteCount + start;
+  // Create an array for elements removed from original array.
+  for (var i = start; i < endIndex; i++) {
+    if (i in this) {
+      deletedElements[deletedElements.length] = this[i];
+    } else {
+      deletedElements.length++;
+    }
+  }
+  // Create copy of original array so we can push items back.
+  for (var j = 0; j < start; j++) {
+    if (j in this) {
+      backupArray[backupArray.length] = this[j];
+    }
+  }
+
+  for (var i = endIndex; i < len; i++) {
+    if (i in this) {
+      backupArray[backupArray.length] = this[i];
+    } else {
+      backupArray.length++;
+    }
+  }
+
+  if (start >= 0) {
+    this.length = backupArray.length;
+    for (var i = 0; i < this.length; i++) {
+      this[i] = backupArray[i];
+    }
+  }
+
+  var itemsToAdd = 2;
+  // Go over original array, add additional items.
+  if (itemCount > 0) {
+    while (itemCount > 0) {
+      this.length++;
+      for (var i = this.length - 1; i > start; i--) {
+          this[i] = this[i - 1];
+      }
+
+      this[start] = arguments[itemsToAdd];
+      itemsToAdd++;
+      itemCount--;
+      start++;
+    }
+  }
+   
+  return deletedElements;
+}
+
+
+tests({
+  '1. It should return empty array if no parameters specified.': function() {
+    var months = ['Jan', 'March', 'April', 'June'];
+    var emptyArray = months.mySplice();
+    eq(emptyArray.length, 0);
+    eq(Array.isArray(emptyArray), true);
+  },
+  '2. It should delete elements according to start index.': function() {
+    var numbers = [1, 2, 3, 4];
+    var splicedNumbers = numbers.mySplice(2);
+    eq(splicedNumbers.length, 2);
+    eq(splicedNumbers[0], 3);
+    eq(splicedNumbers[1], 4);
+  },
+  '3. It should return original array minus start index.': function() {
+    var numbers = [1, 2, 3, 4];
+    numbers.mySplice(2);
+    eq(numbers[0], 1);
+    eq(numbers[1], 2);
+    eq(numbers.length, 2);
+  },
+  '4. If start greater than arr.length, actual starting index will be set to the length of the array.': function() {
+    var months = ['Jan', 'March', 'April', 'June'];
+    var splicedMonths = months.mySplice(5);
+    eq(splicedMonths.length, 0);
+    eq(months.length, 4);
+  },
+  '5. If start is negative it will begin from end of the array.': function() {
+    var months = ['Jan', 'March', 'April', 'June'];
+    var backupArray = months.mySplice(-1);
+    var monthsToBe = ['Jan', 'March', 'April'];
+    eq(months.length, 3);
+    eq(backupArray.length, 1);
+    months.forEach(function(el, i) {
+      eq(monthsToBe[i], el);
+    });
+  },
+  '6. It should start from 0 if negative absolute value greater than array.length.': function() {
+    var numbers = [1, 2, 3, 4];
+    var backupArray = numbers.mySplice(-4);
+    eq(backupArray.length, 4);
+    eq(numbers.length, 0);
+  },
+  // Optional deleteCount
+  '7. It should take optional delete count.': function() {
+    var numbers = [1, 2, 3, 4];
+    var backupArray = numbers.mySplice(0, 2);
+    eq(numbers.length, 2);
+    eq(backupArray.length, 2);
+  },
+  '8. It should start with 0 if start index is negative and the deleteCount should start from index.': function() {
+    var fruits = ['Apple', 'Banana', 'Cherry', 'Plum'];
+    var splicedFruits = fruits.mySplice(-4, 1);
+    eq(fruits.length, 3);
+    eq(splicedFruits.length, 1);
+    eq(String(fruits), ['Banana', 'Cherry', 'Plum']);
+    eq(String(splicedFruits), ['Apple']);
+  },
+  '9. It should not delete if delete count 0 or negative.': function() {
+    var numbers = [1];
+    var splicedNumbers = numbers.mySplice(0, -1);
+    eq(splicedNumbers.length, 0);
+    eq(numbers.length, 1);
+  },
+  '10. I should delete all elements if deleteCount is more than array.length - start.': function() {
+    var fruits = ['Apple', 'Banana', 'Cherry', 'Plum'];
+    var splicedFruits = fruits.mySplice(0, 10);
+    eq(fruits.length, 0);
+    eq(splicedFruits.length, 4);
+  },
+  '11. It should start from + if start index neg. and deleteCount to array.length if greater than.': function() {
+    var numbers = [1, 2, 3, 4];
+    var backupArray = numbers.mySplice(-2, 10);
+    eq(numbers.length, 2);
+    eq(backupArray.length, 2);
+    eq(numbers[1], 2);
+    eq(backupArray[0], 3);
+  },
+  '12. It should delete the holes too.': function() {
+    var arr = [,];
+    var backupArray = arr.mySplice(0, 1);
+    eq(0 in backupArray, false);
+    eq(arr.length, 0);
+    eq(backupArray.length, 1);
+  },
+  // Adding and deleting
+  '13. It should add additional elements to original array, starting from index 0 if no start and delete specified.': function() {
+    var numbers = [1, 2, 3, 4];
+    var backupArray = numbers.mySplice(0, 0, 5, 6);
+    var arrayToReference = [5, 6, 1, 2, 3, 4];
+    eq(numbers.length, 6);
+    eq(backupArray.length, 0);
+    arrayToReference.forEach(function(el, i) {
+      eq(el, numbers[i]);
+    });
+  },
+  '14. It should start, delete and add items starting at start index.': function() {
+    var numbers = [1, 2, 3, 4];
+    var backupArray = numbers.mySplice(0, 1, 5, 6);
+    var arrayToReference = [5, 6, 2, 3, 4];
+    eq(backupArray.length, 1);
+    eq(backupArray[0], 1);
+    eq(numbers.length, 5);
+    eq(numbers[0], 5);
+    arrayToReference.forEach(function(el, i) {
+      eq(el, numbers[i]);
+    });
+  },
+  '15. It should start from start index to delete-replace elements.': function() {
+    var numbers = [1, 2, 3, 4];
+    var backupArray = numbers.mySplice(1, 2, 5, 6);
+    var arrayToReference = [1, 5, 6, 4];
+    eq(backupArray[0], 2);
+    eq(backupArray[1], 3);
+    eq(numbers.length, 4);
+    arrayToReference.forEach(function(el, i) {
+      eq(el, numbers[i]);
+    });
+  },
+  '16. It should add without deleting elements.': function() {
+    var numbers = [1, 3, 4];
+    var backupArray = numbers.mySplice(1, 0, 2);
+    var arrayToReference = [1, 2, 3, 4];
+    eq(backupArray.length, 0);
+    eq(numbers.length, 4);
+    arrayToReference.forEach(function(el, i) {
+      eq(el, numbers[i]);
+    });
+  },
+  '17. It should handle holes too.': function() {
+    var numbers = [1, , 3, 4];
+    var backupArray = numbers.mySplice(1, 1, 2);
+    var arrayToReference = [1, 2, 3, 4];
+    eq(backupArray, '');
+    eq(numbers.length, 4);
+    arrayToReference.forEach(function(el, i) {
+      eq(el, numbers[i]);
+    });
+  },
+  '18. It should add end of index multiple elements.': function() {
+    var months = ['Jan', 'Feb', 'March', 'April', 'May', 'June'];
+    var backupArray = months.mySplice(6, 0, 'July', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec');
+    var arrayToReference = ['Jan', 'Feb', 'March', 'April', 'May', 'June', 'July', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    arrayToReference.forEach(function(el, i) {
+      eq(el, months[i]);
+    });
+    eq(String(months), ['Jan', 'Feb', 'March', 'April', 'May', 'June', 'July', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']);
+  },
+  '19. It should add and delete items.': function() {
+    var months = ['Jan', 'Dec', 'March', 'April', 'June'];
+    var backupArray = months.mySplice(1, 1, 'Feb');
+    var arrayToReference = ['Jan', 'Feb', 'March', 'April', 'June'];
+    arrayToReference.forEach(function(el, i) {
+      eq(el, months[i]);
+    });
+    eq(String(months), ['Jan', 'Feb', 'March', 'April', 'June']);
+    eq(backupArray[0], 'Dec');
+    eq(backupArray.length, 1);
+  },
+  '20. It should remove multiple items and add multiple items from higher indexes.': function() {
+    var months = ['Jan', 'Feb', 'March', 'April', 'June'];
+    var backupArray = months.mySplice(3, 2, 'April', 'May', 'June', 'July');
+    var arrayToReference = ['Jan', 'Feb', 'March', 'April', 'May', 'June', 'July'];
+    arrayToReference.forEach(function(el, i) {
+      eq(el, months[i]);
+    });
+    eq(String(backupArray), ['April', 'June']);
+    eq(months.length, 7);
+  },
+  '21. It should handle multiple holes replace with new entry.': function() {
+    var months = ['Jan', 'Feb', ,'March', 'April', 'June', ,];
+    var backupArray = months.mySplice(2, 0, 3);
+    var arrayToReference = ['Jan', 'Feb', 3,  ,'March', 'April', 'June', ,];
+    arrayToReference.forEach(function(el, i) {
+      eq(el, months[i]);
+    });
+  }
+});
+
+
+
+</script>  
+  
+
+</body>
+</html>

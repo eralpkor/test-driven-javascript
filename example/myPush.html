@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>push</title>
+</head>
+<body>
+  <script src='../simpletest.js'></script>
+  <h1 style="text-align:center">Array.prototype.push()</h1>
+
+
+<script>
+// The push() method adds one or more elements to the end of an array
+// and returns the new length of the array.
+
+
+
+
+Array.prototype.myPush = function(elements) {
+  if (this.length + arguments.length > 9.0071993e+15) {
+    throw new TypeError('Too many arguments...')
+  }
+
+  if (Object.prototype.toString.call(this) === '[object Object]') {
+    if (!this.length) {
+      this.length = 0;
+    }
+    
+    for (var i = 0; i < arguments.length; i++) {
+      this[this.length] = arguments[i];
+      this.length++
+    }
+
+  } else {
+    for (var i = 0; i < arguments.length; i++) {
+      this[this.length] = arguments[i];
+    }
+  }
+
+  return this.length;
+}
+
+
+tests({
+'1. It should add an element to the end of the array.': function() {
+  var numbers = [1];
+  numbers.myPush(2);
+  eq(numbers[1], 2);
+},
+'2. It should return the new length of the array.': function() {
+  var numbers = [1, 2];
+  numbers.myPush(3);
+  eq(numbers.length, 3);
+},
+'3. It should take multiple elements as arguments.': function() {
+  var fruits = ['banana', 'cherry'];
+  fruits.myPush('melon', 'apple', 'plum');
+  eq(fruits[2], 'melon');
+  eq(fruits[3], 'apple');
+  eq(fruits[4], 'plum');
+  eq(fruits.length, 5);
+},
+'4. It should take multiple data types and elements.': function() {
+  var myArray = [];
+  var fruit = ['apple'];
+  var someObject = {car: 'camaro'};
+  var total = [99, fruit, 'banana', someObject, 100];
+  myArray.myPush(99, fruit, 'banana', someObject, 100);
+  total.forEach(function(el, i) {
+    eq(myArray[i], el);
+  });
+},
+'5. It should be able to merge two arrays.': function() {
+  var vegetables = ['parsnip', 'potato'];
+  var moreVegs = ['celery', 'beetroot'];
+  Array.prototype.myPush.apply(vegetables, moreVegs);
+  eq(vegetables.length, 4);
+  eq(vegetables[0], 'parsnip');
+  eq(vegetables[3], 'beetroot');
+},
+'It should handle objects with no length property.': function() {
+  var obj = {};
+  Array.prototype.myPush.call(obj, 1);
+  eq(obj.length, 1);
+  eq(JSON.stringify({0: 1, length: 1}), JSON.stringify(obj)); 
+},
+});
+
+
+
+</script>  
+
+
+
+</body>
+</html>

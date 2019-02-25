@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>lastIndexOf</title>
+</head>
+<body>
+
+  <h1 style="text-align:center">Array.prototype.lastIndexOf()</h1>
+  <script src="../simpletest.js"></script>
+
+
+<script>
+// The lastIndexOf() method returns the last index at which a given element 
+// can be found in the array, or -1 if it is not present. The array is 
+// searched backwards, starting at fromIndex.
+
+// function myLastIndexOf(array, searchElement, fromIndex) {
+
+//   for (let i = 10; i--;) {
+
+//   }
+
+//   return -1;
+// }
+
+function myLastIndexOf(array, searchElement, fromIndex) {
+  
+  
+   if (arguments.length === 3) {
+      if (fromIndex < 0) {
+        fromIndex = array.length + fromIndex + 1;
+      } 
+    } else {
+      var fromIndex = array.length;
+    }
+
+  for (var i = fromIndex; i--;) {
+    if (searchElement === array[i]) {
+      return i;
+    }
+  }
+
+  return -1;
+}
+
+tests({
+  '1. It should iterate backwards through the array and return the last index.': function() {
+    var index = myLastIndexOf(['apple', 'banana', 'orange', 'apple'], 'apple');
+    eq(index, 3);
+  },
+  '2. It should take optional start from index.': function() {
+    var index = myLastIndexOf(['a', 'b', 'c', 'd', 'e'], 'e');
+    eq(index, 4);
+  },
+  '3. If provided index is negative 1, it should still search from back to front.': function() {
+    var index = myLastIndexOf(['apple', 'banana', 'cherry'], 'cherry', -1);
+    eq(index, 2);
+  },
+  '4. It should return -1 if array is empty.': function() {
+    var index = myLastIndexOf([]);
+    eq(index, -1);
+  },
+  '5. It should return n index if array undefined.': function() {
+    var index = myLastIndexOf([undefined, undefined]);
+    eq(index, 1);
+  },
+  '6. It should return -1 if array null.': function() {
+    var index = myLastIndexOf([null, null]);
+    eq(index, -1);
+  },
+  '7. If fromIndex -2 it should return -1 for following array.': function() {
+    var index = myLastIndexOf(['apple', 'banana', 'cherry'], 'cherry', -2);
+    eq(index, -1);
+  },
+  '*. custom pos index.': function() {
+    var index = myLastIndexOf(['apple', 'banana', 'cherry'], 'cherry', 1);
+    eq(index, -1);
+  },
+  '*. custom pos index.': function() {
+    var index = myLastIndexOf(['apple', 'banana', 'cherry'], 'cherry', 2);
+    eq(index, 2);
+  }
+});
+
+
+</script>
+
+
+
+
+</body>
+</html>

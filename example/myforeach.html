@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  
+
+  <script src="../simpletest.js"></script>
+
+  <script>
+
+// Example 1:
+// forEach([1, 2, 3], function() {
+//   console.log('Hi');
+// });
+
+// Example 2:
+// forEach([1, 2, 3], function(number) {
+//   console.log(number);
+// });
+    // Runs array length times
+    // Passed argument to the callback runs per array elements
+   // ALWAYS returns undefined
+function forEach(array, callback, optionalThis) {
+  var forEachCallback = callback;
+
+  if(optionalThis) {
+    forEachCallback = callback.bind(optionalThis);
+  }
+
+  for (var index = 0; index < array.length; index++) {
+    forEachCallback(array[i], index, array);
+  }
+}
+   
+
+tests({
+  'It should run the callback function array.length times.': function() {
+    var numberOfTimesCallbackRun = 0;
+    forEach([1, 2, 3], function() {
+      numberOfTimesCallbackRun++;
+    });
+    eq(numberOfTimesCallbackRun, 3);
+  },
+  'It should pass in the ith element as the first argument to the callback.': function() {
+  forEach([1], function(value) {
+    eq(value, 1);
+  });
+  },
+  'The index of the current element being processed in the array.': function() {
+    forEach([1], function(value, index) {
+      eq(index, 0);
+    });
+  },
+  'It should pass in the original array as the the third argument to the callback.': function() {
+    var originalArray = [1];
+    forEach(originalArray, function(value, index, array) {
+      eq(originalArray, array);
+  });
+  },
+  'It should exept configurable this object. Value to use as this when executing callback.': function() {
+    forEach([1], function() {
+      eq(this.optionalThis, 'Hello world.');
+    }, {optionalThis: 'Hello world.'});
+  }
+});
+
+
+
+  </script>
+
+
+</body>
+</html>

@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>copyWithin</title>
+</head>
+<body>
+  <script src="../simpletest.js"></script>
+  <h1 style="text-align:center">Array.prototype.copyWithin()</h1>
+
+<script>
+// The copyWithin() method shallow copies part of an this
+// to another location in the same this and returns it, without modifying its size.
+// Syntax:
+// arr.copyWithin(target)
+// arr.copyWithin(target, start)
+// arr.copyWithin(target, start, end)
+
+// Return Value:
+// The modified this.
+
+Array.prototype.myCopyWithin = function(target, start, end) {
+  var len = this.length;
+
+  if (!target) {
+    target = 0;
+  }
+
+  if (target < 0) {
+    target = Math.max(len + target, 0);
+  } else {
+    target = target;
+  }
+
+  if (!start) {
+    start = 0;
+  }
+
+  start = (start < 0) ? Math.max(len + start, 0) : start;
+
+  if (!end) {
+    end = len;
+  }
+
+  end = (end < 0) ? Math.max(len + end, 0) : end; //Math.min(end, len);
+  var count = Math.min(end - start, len - target);
+  var dir = 1;
+
+  if (start < target && target < (start + count)) {
+    dir = -1;
+    start += count - 1;
+    target += count - 1;
+  }
+
+  while (count > 0) {
+    if (start in this) {
+      this[target] = this[start];
+    } else {
+      delete this[target];
+    }
+    start += dir;
+    target += dir;
+    count--;;
+  }
+
+  return this;
+}
+
+  
+
+
+tests({
+  // All about target.
+  '1. It should take an this and return same this if no target specified (undefined).': function() {
+    var numbers = [1, 2, 3, 4];
+    var out = numbers.myCopyWithin();
+    eq(out, numbers);
+  },
+  '2. It should not change this.length.': function() {
+    var numbers = [1, 2, 3, 4];
+    eq(numbers.myCopyWithin().length, 4);
+  },
+  '3. It should start copying at target index.': function() {
+    var numbers = [1, 2, 3, 4];
+    numbers.myCopyWithin(1);
+    eq(numbers[0], 1);
+    eq(numbers[1], 1);
+    eq(numbers[2], 2);
+    eq(numbers[3], 3);
+  },
+  '4. It should count from the end if target is negative.': function() {
+    var abcd = ['a', 'b', 'c', 'd'];
+    abcd.myCopyWithin(-1);
+    eq(abcd[3], 'a');
+    eq(abcd[2], 'c');
+    eq(abcd[1], 'b');
+    eq(abcd[0], 'a');
+  },
+  '5. It should not modify the this if target is greater than the this.length.': function() {
+    var numbers = [1, 2, 3, 4];
+    numbers.myCopyWithin(4);
+    eq(numbers[3], 4);
+  },
+  // All about start.
+  '6. It should take start index for starting position.': function() {
+    eq([1, 2, 3, 4, 5].myCopyWithin(0, 3)[0], 4);
+    eq([1, 2, 3, 4, 5].myCopyWithin(0, 2)[0], 3);
+    eq([1, 2, 3, 4, 5].myCopyWithin(0, 1)[0], 2);
+  },
+  '7. It should start from the end of the this, if start is negative index.': function() {
+    var numbers = [1, 2, 3, 4, 5].copyWithin(0, -2);
+    numbers.forEach(function(el, i) {
+      eq(numbers[i], el);
+    });
+    eq(numbers[0], 4);
+  },
+  '8. It should start from 0 if negative start greater than this.length.': function() {
+    var numbers = [1, 2, 3];
+    numbers.myCopyWithin(0, -3).forEach(function (el, i) {
+      eq(numbers[i], el);
+    });
+    eq(numbers[0], 1);
+    eq(numbers[2], 3);
+  },
+  // All about end.
+  '9. It should take end parameter as third argument.': function() {
+    var numbers = [1, 2, 3, 4, 5].copyWithin(0, 1, 3);
+    eq(numbers[0], 2);
+    eq(numbers[1], 3);
+    eq(numbers[2], 3);
+    eq(numbers[3], 4);
+    eq(numbers[4], 5);
+  },
+  '10. It should count from the end if end is negative.': function() {
+    var numbers = [1, 2, 3, 4, 5];
+    var copiedNumbers = [2, 2, 3, 4, 5];
+    numbers.myCopyWithin(0, 1, -3);
+    copiedNumbers.forEach(function (el, i) {
+      eq(numbers[i], el);
+    });
+  }
+});
+</script>
+
+</body>
+</html>

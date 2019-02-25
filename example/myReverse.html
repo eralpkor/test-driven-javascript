@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>reverse</title>
+</head>
+<body>
+  <h1 style="text-align:center">Array.prototype.reverse()</h1>
+  <script src="../simpletest.js"></script>
+
+<script>
+// The reverse method transposes the elements of the calling array
+// object in place, mutating the array, and returning a reference to the array. 
+
+
+Array.prototype.myReverse = function() {
+  var len = this.length - 1;
+  var middle = Math.floor(this.length / 2);
+  var reversedArray;
+  var i = 0;
+
+  if (isNaN(this.length) || this.length < 0) {
+    return this;
+  }
+
+  while (i !== middle) {
+    if (len in this && i in this) {
+      reversedArray = this[len];
+      this[len] = this[i];
+      this[i] = reversedArray;
+    } else {
+      if (!(len in this) && (i in this)) {
+        this[len] = this[i];
+        delete this[i];
+      } else if (!(i in this) && (len in this)) {
+        this[i] = this[len];
+        delete this[len];
+      }
+    }
+    i++;
+    len--;
+  }
+
+  return this;
+}
+
+
+tests({
+'1. It should take an array as an argument and reverses the array.': function() {
+  var myArray = [1, 2, 3, 4];
+  myArray.myReverse();
+  myArray.forEach(function(elements, index) {
+    eq(elements, myArray[index]);
+  });
+  eq(myArray[0], 4);
+},
+'2. It should reverse handling holes.': function() {
+  var myArray = [1, 2, 3, 4, , , , , ];
+  myArray.myReverse();
+  myArray.forEach(function(elements, index) {
+    eq(elements, myArray[index]);
+  });
+  eq(myArray[7], 1);
+},
+'3. It should handle undefined, null and boolean.': function() {
+  var myArray = [1, 2, 3, 4, undefined, null, , , true];
+  myArray.myReverse();
+  eq(myArray[0], true);
+  myArray.forEach(function(elements, index) {
+    eq(myArray[index], elements);
+  });
+},
+'4. It should accept non-array objects.': function() {
+  var testObject = {
+      0: 1,
+      1: 2,
+      2: 3,
+      length: 3
+    }
+    Array.prototype.myReverse.call(testObject);
+    eq(testObject[0], 3);
+    eq(testObject[1], 2);
+    eq(testObject[2], 1);
+},
+'5. It should not reverse objects lacking a length property.': function () {
+    var testObject = {
+      0: 1,
+      1: 2,
+      2: 3
+    }
+    Array.prototype.myReverse.call(testObject);
+    eq(testObject[0], 1);
+    eq(testObject[1], 2);
+    eq(testObject[2], 3);
+  },
+  '6. It should not reverse objects with a non-numeric length value.': function () {
+    var testObject = {
+      0: 1,
+      1: 2,
+      2: 3,
+      length: "I'm not a number"
+    }
+    Array.prototype.myReverse.call(testObject);
+    eq(testObject[0], 1);
+    eq(testObject[1], 2);
+    eq(testObject[2], 3);
+  },
+  '7. It should not reverse objects with a non-positive length value.': function () {
+    var testObject = {
+      0: 1,
+      1: 2,
+      2: 3,
+      length: -3
+    }
+    Array.prototype.myReverse.call(testObject);
+    eq(testObject[0], 1);
+    eq(testObject[1], 2);
+    eq(testObject[2], 3);
+  },
+  '8. If called on \'undefined\' it should throw a TypeError.': function () {
+    try {
+      undefined.myReverse();
+    } catch (e) {
+      var isTypeError = e instanceof TypeError;
+    }
+    eq(isTypeError, true);
+  },
+  '9. If called on \'null\', it should throw a TypeError.': function () {
+    try {
+      null.myReverse();
+    } catch (e) {
+      var isTypeError = e instanceof TypeError;
+    }
+    eq(isTypeError, true);
+  },
+  '10. If called on a string, it should throw a TypeError.': function () {
+    try {
+      'I am a string.'.myReverse();
+    } catch (e) {
+      var isTypeError = e instanceof TypeError;
+    }
+    eq(isTypeError, true);
+  },
+});
+  
+
+// Working function
+// function myReverse(array) {
+//   var len = array.length - 1;
+//   var middle = Math.floor(array.length / 2);
+//   var reversedArray;
+//   var i = 0;
+
+//   if (isNaN(array.length) || array.length < 0) {
+//     return array;
+//   }
+
+//   while (i !== middle) {
+//     if (len in array && i in array) {
+//       reversedArray = array[len];
+//       array[len] = array[i];
+//       array[i] = reversedArray;
+//     } else {
+//       if (!(len in array) && (i in array)) {
+//         array[len] = array[i];
+//         delete array[i];
+//       } else if (!(i in array) && (len in array)) {
+//         array[i] = array[len];
+//         delete array[len];
+//       }
+//     }
+//     i++;
+//     len--;
+//   }
+
+//   return array;
+// }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Original code;
+// function myReverse(array) {
+//   var len = array.length - 1;
+//   var reversedArray = [];
+
+//   for (var i = len; i >= 0; i--) {
+//     reversedArray.push(array[i]);
+//   }
+
+//   for (let l = len; l >= 0; l--) {
+//     array.pop();
+//   }
+  
+//   // array.push(...reversedArray);
+//   array.push.apply(array, reversedArray);
+//   return array;
+// }
+
+
+// Array.prototype.myReverse = function() {
+//     var array = this;
+//     var endIndex = array.length - 1;
+//     var middle = Math.floor(array.length / 2);
+//     var temporaryEndElement;
+
+//     for (var i = 0; i < middle; i++) {
+//       if (endIndex in array && i in array) {
+//         temporaryEndElement = array[endIndex];
+//         array[endIndex] = array[i];
+//         array[i] = temporaryEndElement;     
+//       } else {
+//         // dealing with holes (empty not undefined)
+//         if (!(endIndex in array) && (i in array)) {
+//           array[endIndex] = array[i];
+//           delete array[i];
+//         } else if (!(i in array) && (endIndex in array)) {
+//           array[i] = array[endIndex];
+//           delete array[endIndex];
+//         }
+//       }
+//       --endIndex;
+//     }
+
+//     return array;
+//   }
+
+
+
+
+/* function myReverse(array) {
+var len = array.length - 1;
+var middle = Math.floor(array.length / 2);
+var reversedArray;
+
+for (let i = 0; i < middle; i++) { 
+  if (len in array && i in array) { r
+    eversedArray=array[len]; array[len]=array[i];
+  array[i]=reversedArray; 
+} else { if (!(len in array) && (i in array)) { 
+  array[len]=array[i]; delete array[i]; } else
+  if (!(i in array) && (len in array)) { 
+    array[i]=array[len]; delete array[len]; } } len--; } 
+    return array; } */
+    
+
+
+
+
+
+  // function myReverse(arr) {
+// 	let result = [];
+// 	for (var i = arr.length - 1; i >= 0; i--) {
+// 		result.push(arr[i])
+// 	} 
+// 	for (var i = arr.length - 1; i >= 0; i--) {
+// 		arr[i] = result[i];
+// 	}
+// 	return result;
+// }
+</script>
+</body>
+</html>

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>shift</title>
+</head>
+<body>
+  <h1 style="text-align:center">Array.prototype.shift()</h1>
+  <script src="../simpletest.js"></script>
+
+
+<script>
+
+// The shift() method removes the first element from an array
+// and returns that removed element. This method changes the length of the array.
+
+Array.prototype.myShift = function() {
+  var i = 0;
+  var shifted = this[0];
+
+  if (this.length === 0) {
+    return undefined;
+  }
+  
+  while (i < this.length) {
+    this[i] = this[i + 1];
+    i++;
+  }
+
+  this.length -= 1; 
+  return shifted;
+}
+
+
+
+tests({
+  '1. It should return undefined if array is empty.': function() {
+    var emptyArray = [];
+    var shiftedArray = emptyArray.myShift();
+    eq(shiftedArray, undefined);
+  },
+  '2. It should remove the first element from the array.': function() {
+    var myArray = [1, 2, 3];
+    var firstElement = myArray.myShift();
+    eq(firstElement, 1);
+  },
+  '3. It should remove first element and changes the length of the array.': function() {
+    var cats = ['sunny', 'norman'];
+    cats.myShift();
+    eq(cats[0], 'norman');
+    eq(cats.length, 1);
+  },
+  '4. It should return the first element of the array.': function() {
+    var cars = ['Toyota', 'Nissan', 'Camaro'];
+    var shifted = cars.myShift();
+    eq(shifted, 'Toyota');
+  }
+});
+
+
+
+
+
+
+
+
+
+
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+</body>
+</html>
