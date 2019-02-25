@@ -41,6 +41,6 @@ Create a test page called adder-test.html (you can name it anything). This inclu
    },
 
  });
-</script> ```
+</script>
 
 Open the page in your browser. Green is good. Red is bad. If it's red, look in the JavaScript console for messages.
