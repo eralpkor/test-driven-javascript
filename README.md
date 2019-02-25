@@ -23,3 +23,24 @@ Let's say you have a function in adder.js:
 function add(a, b) {
   return a + b;
 }
+
+Create a test page called adder-test.html (you can name it anything). This includes your code under test, tinytest.js and defines your tests:
+
+``` <script src="tinytest.js"></script>
+<script src="adder.js"></script>
+<script>
+ tests({
+
+   'adds numbers': function() {
+     eq(6, add(2, 4));
+     eq(6.4, add(2.4, 4));
+   },
+
+   'subtracts numbers': function() {
+     eq(-2, add(2, -4)); 
+   },
+
+ });
+</script> ```
+
+Open the page in your browser. Green is good. Red is bad. If it's red, look in the JavaScript console for messages.
