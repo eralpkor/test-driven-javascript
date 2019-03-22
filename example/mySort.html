@@ -113,7 +113,7 @@ tests({
       eq(numbers[i], el);
     });
   },
-  /* '7. It should sort all \'undefined\' elements to the end of the array, with no call to compareFunction.': function () {
+  '7. It should sort all \'undefined\' elements to the end of the array, with no call to compareFunction.': function () {
     function compareNumbers(a, b) {
       numberOfTimesCallbackHasRun++;
       return a - b;
@@ -134,116 +134,11 @@ tests({
     var compareFunctionCallsWithNoUndefined = numberOfTimesCallbackHasRun;
 
     eq(compareFunctionCallsWithNoUndefined > compareFunctionCallsWithUndefined, true);
-  } */
+  }
 
 });
 
-// from the book
-// function mySort(arr) {
-// 	var dirty = false;
 
-// 	function checkIfDirty(array) {
-// 		for (let i = 0; i < arr.length; i++) {
-// 			if (arr[i] > arr[i + 1] && i !== arr.length) {
-// 				var a = arr[i];
-// 				var b = arr[i + 1];
-
-// 				arr[i] = b;
-// 				arr[i + 1] = a;
-
-// 				return true;
-// 			} 
-// 		}	
-// 		return false;
-// 	}
-
-// 	do {
-// 		dirty = checkIfDirty(arr);	
-// 	} while (dirty);
-
-// 	return arr;
-// }
-
-
-
-
-
-
-
-
-
-
-
-
-// ['80', '9', '700', 80, 40, 1, 5, 200].sort(function(a, b) {
-//         if (a < b) {
-//           return -1;
-//         }
-//         if (a > b) {
-//           return 1;
-//         }
-//         return 0;
-//       });
-
-
-
-/* Array.prototype.mySort = function() {
-  var store;
-  var i = 0;
-  var len = this.length -1;
-  // var j = 0;
-
-  while (i < len) {
-    var j = i + 1;
-
-    while (j <= len) {
-      if (String(this[i]) > String(this[j])) {
-        store = this[j];
-        this[j] = this[i];
-        this[i] = store;
-      } else {
-        break;
-      }
-
-      j++;
-    }
-    
-    i++;
-  }
-
-  // for (var i = 0; i < this.length - 1; i++) {
-  //   for (var j = i + 1; j <= this.length - 1; j++) {
-  //     if (String(this[i]) > String(this[j])) {
-  //       store = this[j];
-  //       this[j] = this[i];
-  //       this[i] = store;
-  //     } else {
-  //       continue;
-  //     }
-  //   }
-  // }
-
-  return this;
-}
- */
-
-// Array.prototype.mySort = function(callback) {
-//   var store;
-//   var i = 0;
-//   var j = 0;
-//   var len = this.length - 1;
-
-//  for (var i = 0; i < len - 1; i++) {
-//     for (var j = i + 1; j <= len - 1; j++) {
-//       if (String(this[i]) > String(this[j])) {
-//         store = this[j];
-//         this[j] = this[i];
-//         this[i] = store;
-//       } else {
-//         continue;
-//       }
-//     }
-//   }
 
 </script>
 
