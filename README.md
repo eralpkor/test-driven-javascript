@@ -2,7 +2,7 @@
 
 
 Watch and Code project:
-Write your own array methods.
+Write your own implementation of JavaScript array methods.
 
 **All of the methods are in test directory**
 
