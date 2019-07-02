@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <script src="../tinytest.js"></script>
+
+
+<script>
+  // Array.prototype.flat()
+  // The flat() method creates a new array with all sub-array elements concatenated into it recursively up to the specified depth.
+  // SyntaxSection
+  // var newArray = arr.flat([depth]);
+
+  // Return valueSection
+// A new array with the sub-array elements concatenated into it.
+
+function flat(arr, n = 1) {
+  var flattendArray = [];
+  // Run this IIFE recursively to flatten arrays.
+  (function helper(arr) {
+   arr.forEach(function(element) {
+    if (Array.isArray(element)) {
+        helper(element);
+      } else {
+        flattendArray[flattendArray.length] = element;
+      }
+   }) 
+  })(arr);
+  return flattendArray;
+}
+
+
+tests({
+  '1. It should flatten nested (1) array.': function () {
+    fail()
+  },
+  '2. It should flatten nested (2) array': function() {
+
+  }
+});
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</script>
+
+
+</body>
+</html>
+
