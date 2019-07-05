@@ -7,7 +7,7 @@
   <title>Document</title>
 </head>
 <body>
-  <script src="../tinytest.js"></script>
+  <script src="../simpletest.js"></script>
 
 
 <script>
@@ -19,28 +19,57 @@
   // Return valueSection
 // A new array with the sub-array elements concatenated into it.
 
+
+// function flat(arr, n = 1) {
+//   var flattendArray = [];
+  
+// 	function helper(arr, n) {
+//     arr.forEach(function(element) {
+//       if (Array.isArray(element) && n > 0) {
+//           helper(element, n - 1);
+//         } else {
+//           flattendArray[flattendArray.length] = element;
+//         }
+//     }) 
+//   };
+//     // Run recursively to flatten arrays.
+// 	helper(arr, n);
+  
+//   return flattendArray;
+// }
+
+// With IIFE
 function flat(arr, n = 1) {
   var flattendArray = [];
   // Run this IIFE recursively to flatten arrays.
-  (function helper(arr) {
-   arr.forEach(function(element) {
-    if (Array.isArray(element)) {
-        helper(element);
-      } else {
-        flattendArray[flattendArray.length] = element;
-      }
-   }) 
-  })(arr);
+	(function helper(arr, n) {
+    arr.forEach(function(element) {
+      if (Array.isArray(element) && n > 0) {
+          helper(element, n - 1);
+        } else {
+          flattendArray[flattendArray.length] = element;
+        }
+    }); 
+  })(arr, n);
+	
   return flattendArray;
 }
 
 
+// var testArr = [1, 2, 3, [4, 5, [6, [7, [8]]]], ['eralp', 'susan', [true, false]]];
+
 tests({
-  '1. It should flatten nested (1) array.': function () {
-    fail()
+  '1. It should flatten nested (1) array with default value of 1': function () {
+    const testArr = [1, 2, [3]];
+    const result = flat(testArr);
+
+    eq(JSON.stringify(result), JSON.stringify([1, 2, 3]));
   },
   '2. It should flatten nested (2) array': function() {
+    const testArr = [1, 2, [3, [4]]];
+    const result = flat(testArr);
 
+    eq(JSON.stringify(result), JSON.stringify([1, 2, 3, [4]]));
   }
 });
   
