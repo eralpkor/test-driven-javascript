@@ -20,40 +20,40 @@
 // A new array with the sub-array elements concatenated into it.
 
 
-// function flat(arr, n = 1) {
-//   var flattendArray = [];
-  
-// 	function helper(arr, n) {
-//     arr.forEach(function(element) {
-//       if (Array.isArray(element) && n > 0) {
-//           helper(element, n - 1);
-//         } else {
-//           flattendArray[flattendArray.length] = element;
-//         }
-//     }) 
-//   };
-//     // Run recursively to flatten arrays.
-// 	helper(arr, n);
-  
-//   return flattendArray;
-// }
-
-// With IIFE
 function flat(arr, n = 1) {
   var flattendArray = [];
-  // Run this IIFE recursively to flatten arrays.
-	(function helper(arr, n) {
+  
+	function helper(arr, n) {
     arr.forEach(function(element) {
       if (Array.isArray(element) && n > 0) {
           helper(element, n - 1);
         } else {
           flattendArray[flattendArray.length] = element;
         }
-    }); 
-  })(arr, n);
-	
+    }) 
+  };
+    // Run recursively to flatten arrays.
+	helper(arr, n);
+  
   return flattendArray;
 }
+
+// With IIFE
+// function flat(arr, n = 1) {
+//   var flattendArray = [];
+//   // Run this IIFE recursively to flatten arrays.
+// 	(function helper(arr, n) {
+//     arr.forEach(function(element) {
+//       if (Array.isArray(element) && n > 0) {
+//           helper(element, n - 1);
+//         } else {
+//           flattendArray[flattendArray.length] = element;
+//         }
+//     }); 
+//   })(arr, n);
+	
+//   return flattendArray;
+// }
 
 
 // var testArr = [1, 2, 3, [4, 5, [6, [7, [8]]]], ['eralp', 'susan', [true, false]]];
@@ -73,17 +73,6 @@ tests({
   }
 });
   
-
-
-
-
-
-
-
-
-
-
-
 
 
 
